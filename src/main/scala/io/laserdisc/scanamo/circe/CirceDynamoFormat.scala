@@ -6,7 +6,7 @@ import org.scanamo._
 
 object CirceDynamoFormat {
 
-  implicit def defaultFormat[T: Encoder: Decoder]: DynamoFormat[T] = new DynamoFormat[T] {
+  def circeDynamoFormat[T: Encoder: Decoder]: DynamoFormat[T] = new DynamoFormat[T] {
 
     override def read(dv: DynamoValue): Either[DynamoReadError, T] =
       new CirceScanamoReader().readAs(dv)
@@ -14,5 +14,7 @@ object CirceDynamoFormat {
     override def write(t: T): DynamoValue =
       new CirceScanamoWriter().write(t)
   }
+
+  implicit def defaultFormat[T: Encoder: Decoder]: DynamoFormat[T] = circeDynamoFormat[T]
 
 }
