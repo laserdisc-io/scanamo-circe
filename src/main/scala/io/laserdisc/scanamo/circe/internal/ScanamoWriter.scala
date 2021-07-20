@@ -1,7 +1,7 @@
 package io.laserdisc.scanamo.circe.internal
 
-import io.circe.{ Json, _ }
 import io.circe.syntax._
+import io.circe.{ Json, _ }
 import org.scanamo.DynamoValue
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
@@ -11,7 +11,7 @@ trait ScanamoWriter[T] {
   def write(t: T): DynamoValue
 }
 
-class CirceScanamoWriter[T: Encoder] extends ScanamoWriter[T] {
+class CirceScanamoWriter[T: Encoder](writeNullObjectAttrs: Boolean) extends ScanamoWriter[T] {
 
   private[this] val folder = new Json.Folder[AttributeValue] {
     override def onNull: AttributeValue =
@@ -32,10 +32,17 @@ class CirceScanamoWriter[T: Encoder] extends ScanamoWriter[T] {
     override def onObject(value: JsonObject): AttributeValue =
       AttributeValue
         .builder()
-        .m(value.toMap.map { case (k, v) => k -> v.foldWith(this) }.asJava)
+        .m(
+          value.toMap
+            .filter(v => writeNullObjectAttrs || !v._2.isNull)
+            .map { case (k, v) => k -> v.foldWith(this) }
+            .asJava
+        )
         .build()
   }
 
   override def write(t: T): DynamoValue =
-    DynamoValue.fromAttributeValue(t.asJson.foldWith(folder))
+    DynamoValue.fromAttributeValue(
+      { if (writeNullObjectAttrs) t.asJson else t.asJson.dropNullValues }.foldWith(folder)
+    )
 }
