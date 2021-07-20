@@ -1,20 +1,25 @@
 package io.laserdisc.scanamo.circe
 
 import io.circe._
-import io.laserdisc.scanamo.circe.internal.{ CirceScanamoReader, CirceScanamoWriter }
+import io.laserdisc.scanamo.circe.internal._
 import org.scanamo._
 
+/**
+  * Import `CirceDynamoFormat._` to get the default `DynamoFormat` instance for encoding and decoding
+  * models to dynamodb using Circe.
+  * <br/><br/>
+  *
+  * Note: This implementation will encode null Json object attributes as `Null`-type dynamodb objects, e.g.
+  * <pre>
+  *  "foo": { "NULL": true}
+  *  </pre>
+  *
+  * @see [[CirceDropNullDynamoFormat]] for an alternate implementation which drops such null values
+  *
+  */
 object CirceDynamoFormat {
 
-  def circeDynamoFormat[T: Encoder: Decoder]: DynamoFormat[T] = new DynamoFormat[T] {
-
-    override def read(dv: DynamoValue): Either[DynamoReadError, T] =
-      new CirceScanamoReader().readAs(dv)
-
-    override def write(t: T): DynamoValue =
-      new CirceScanamoWriter().write(t)
-  }
-
-  implicit def defaultFormat[T: Encoder: Decoder]: DynamoFormat[T] = circeDynamoFormat[T]
+  implicit def defaultFormat[T: Encoder: Decoder]: DynamoFormat[T] =
+    mkCirceDynamoFormat[T](writeNullObjectAttrs = true)
 
 }

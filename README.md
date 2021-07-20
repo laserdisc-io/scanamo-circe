@@ -1,25 +1,48 @@
 # scanamo-circe
 
-This is a small library providing a [circe](https://circe.github.io/circe/) implementation 
+[![Build](https://github.com/laserdisc-io/scanamo-circe/actions/workflows/build.yml/badge.svg)](https://github.com/laserdisc-io/scanamo-circe/actions/workflows/build.yml)
+[![Release](https://github.com/laserdisc-io/scanamo-circe/actions/workflows/release.yml/badge.svg)](https://github.com/laserdisc-io/scanamo-circe/actions/workflows/release.yml)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.laserdisc/scanamo-circe_2.13/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.laserdisc/scanamo-circe_2.13)
+
+
+This is a small library providing [circe](https://circe.github.io/circe/) implementations
 of [Scanamo's](https://www.scanamo.org/) `DynamoFormat`,  converting your models to and from Scanamo 
-`AttributeValue`. This allows full use of DynamoDB while allowing arbitrary `Json` objects to be stored 
+`AttributeValue`s. 
+
+This allows full use of DynamoDB while allowing arbitrary `Json` objects to be stored 
 or reusing existing formats.
 
-# Getting started
+## Using
 
-### Circe
-
-First, add the dependency:
+Add the dependency:
 
 ```scala
-    libraryDependencies += "io.laserdisc" %% "scanamo-circe" % "2.0.0"
+libraryDependencies += "io.laserdisc" %% "scanamo-circe" % "2.0.1"
 ```
 
-Then, import the instance:
+Then import the desired instance wherever you invoke Scanamo operations
 
 ```scala
-    import io.laserdisc.scanamo.circe.CirceDynamoFormat._
+import io.laserdisc.scanamo.circe.CirceDynamoFormat._
 ```
 
-This provides a `DynamoFormat[T]`, which will expect an implicit Circe `Encoder` and `Decoder` in scope.
+*Note:* This imports an implicit `DynamoFormat[T]`, which will expect an implicit circe `Encoder[T]` and `Decoder[T]` in scope.
 
+### CirceDynamoFormat and `null` object values 
+
+`CirceDynamoFormat` is this project's default implementation, which encodes `null` Json values as the equivalent 
+dynamodb null representation, i.e. `{ "NULL": true}`. 
+
+This behaviour is undesirable when the attribute in question is in use by a sparse index.  When saving a model
+for which the sparse index attribute is  `{ "NULL": true}`, the following error will occur:
+
+```
+One or more parameter values were invalid: Type mismatch for Index Key foo Expected: S Actual: NULL
+```
+
+In this case, we may wish to simply drop such null attribute values instead of encoding them to the explicit `NULL` type.  
+The following import brings an instance which discards all `null` object values during write.
+
+```scala
+import io.laserdisc.scanamo.circe.CirceDropNullDynamoFormat
+```
