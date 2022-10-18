@@ -1,7 +1,7 @@
 package io.laserdisc.scanamo.circe.internal
 
 import io.circe.syntax._
-import io.circe.{ Json, _ }
+import io.circe.{Json, _}
 import org.scanamo.DynamoValue
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 

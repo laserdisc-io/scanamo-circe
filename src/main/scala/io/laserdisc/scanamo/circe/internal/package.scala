@@ -1,7 +1,7 @@
 package io.laserdisc.scanamo.circe
 
-import io.circe.{ Decoder, Encoder }
-import org.scanamo.{ DynamoFormat, DynamoReadError, DynamoValue }
+import io.circe.{Decoder, Encoder}
+import org.scanamo.{DynamoFormat, DynamoReadError, DynamoValue}
 
 package object internal {
 
