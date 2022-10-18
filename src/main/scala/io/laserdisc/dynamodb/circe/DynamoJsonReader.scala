@@ -30,12 +30,11 @@ object DynamoJsonReader {
           case "B" =>
             Either
               .fromOption(dynamoJson.asString, s"expected json string, but was $dynamoJson")
-              .map(
-                str =>
-                  AttributeValue
-                    .builder()
-                    .b(SdkBytes.fromByteArray(Base64.getDecoder.decode(str)))
-                    .build()
+              .map(str =>
+                AttributeValue
+                  .builder()
+                  .b(SdkBytes.fromByteArray(Base64.getDecoder.decode(str)))
+                  .build()
               )
           case "BOOL" =>
             Either
@@ -47,30 +46,38 @@ object DynamoJsonReader {
               .map(bool => AttributeValue.builder().nul(bool).build())
           case "SS" =>
             Either
-              .fromOption(for {
-                arr <- dynamoJson.asArray
-                str <- arr.map(_.asString).sequence
-              } yield str, s"expected json array of strings, but was $dynamoJson")
+              .fromOption(
+                for {
+                  arr <- dynamoJson.asArray
+                  str <- arr.map(_.asString).sequence
+                } yield str,
+                s"expected json array of strings, but was $dynamoJson"
+              )
               .map(strs => AttributeValue.builder().ss(strs.asJava).build())
           case "NS" =>
             Either
-              .fromOption(for {
-                arr <- dynamoJson.asArray
-                str <- arr.map(_.asString).sequence
-              } yield str, s"expected json array of strings, but was $dynamoJson")
+              .fromOption(
+                for {
+                  arr <- dynamoJson.asArray
+                  str <- arr.map(_.asString).sequence
+                } yield str,
+                s"expected json array of strings, but was $dynamoJson"
+              )
               .map(strs => AttributeValue.builder().ns(strs.asJava).build())
           case "BS" =>
             Either
-              .fromOption(for {
-                arr <- dynamoJson.asArray
-                str <- arr.map(_.asString).sequence
-              } yield str, s"expected json array of strings, but was $dynamoJson")
-              .map(
-                strs =>
-                  AttributeValue
-                    .builder()
-                    .bs(strs.map(j => SdkBytes.fromByteArray(Base64.getDecoder.decode(j))).asJava)
-                    .build()
+              .fromOption(
+                for {
+                  arr <- dynamoJson.asArray
+                  str <- arr.map(_.asString).sequence
+                } yield str,
+                s"expected json array of strings, but was $dynamoJson"
+              )
+              .map(strs =>
+                AttributeValue
+                  .builder()
+                  .bs(strs.map(j => SdkBytes.fromByteArray(Base64.getDecoder.decode(j))).asJava)
+                  .build()
               )
           case "L" => dynamoJson.foldWith(this)
           case "M" => dynamoJson.foldWith(this)
@@ -90,9 +97,7 @@ object DynamoJsonReader {
           .map { v =>
             Either
               .fromOption(v.asObject, s"cannot cast to object: $v")
-              .flatMap(
-                o => o.toMap.map { case (k, v) => parseDynamoJsonEntry(k, v) }.head
-              )
+              .flatMap(o => o.toMap.map { case (k, v) => parseDynamoJsonEntry(k, v) }.head)
           }
           .toList
           .sequence
@@ -100,13 +105,10 @@ object DynamoJsonReader {
 
       override def onObject(value: JsonObject): Either[String, AttributeValue] =
         value.toMap
-          .map {
-            case (key, value) =>
-              Either
-                .fromOption(value.asObject, s"cannot cast to object entry: $key -> $value")
-                .flatMap(
-                  o => o.toMap.map { case (k, v) => parseDynamoJsonEntry(k, v).map(key -> _) }.head
-                )
+          .map { case (key, value) =>
+            Either
+              .fromOption(value.asObject, s"cannot cast to object entry: $key -> $value")
+              .flatMap(o => o.toMap.map { case (k, v) => parseDynamoJsonEntry(k, v).map(key -> _) }.head)
           }
           .toList
           .sequence

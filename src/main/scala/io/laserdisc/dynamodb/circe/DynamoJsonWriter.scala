@@ -22,8 +22,8 @@ object DynamoJsonWriter {
           .obj(
             av.m()
               .asScala
-              .map {
-                case (k, v) => k -> toJson(v)
+              .map { case (k, v) =>
+                k -> toJson(v)
               }
               .toIndexedSeq: _*
           )
@@ -42,7 +42,7 @@ object DynamoJsonWriter {
         .orElse((if (value.hasSs) Option(value.ss().asScala.toList) else None).map(ss => onStringSet(ss)))
         .orElse((if (value.hasNs) Option(value.ns().asScala.toList) else None).map(ns => onNumberSet(ns)))
         .orElse((if (value.hasBs) Option(value.bs().asScala.toList) else None).map(bs => onBinarySet(bs)))
-        //TODO: this is in theory not possible, but it's not clear how to handle it purely
+        // TODO: this is in theory not possible, but it's not clear how to handle it purely
         .getOrElse(
           throw new IllegalArgumentException(s"unexpected type for value $value")
         )

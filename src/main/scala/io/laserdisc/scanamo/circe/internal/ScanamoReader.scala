@@ -1,8 +1,8 @@
 package io.laserdisc.scanamo.circe.internal
 
 import cats.implicits.toBifunctorOps
-import io.circe.{ Json, _ }
-import org.scanamo.{ DynamoArray, DynamoObject, DynamoReadError, DynamoValue, TypeCoercionError }
+import io.circe.{Json, _}
+import org.scanamo.{DynamoArray, DynamoObject, DynamoReadError, DynamoValue, TypeCoercionError}
 
 import java.io.Serializable
 

@@ -36,11 +36,11 @@ package object circe {
     AttributeValue.builder().m(elems.toMap.asJava).build()
 
   def testReadWrite(jsonString: String, attr: AttributeValue)(
-    implicit toTest: DynamoFormat[Json]
+      implicit toTest: DynamoFormat[Json]
   ): Assertion = testReadWrite(jsonString.unsafeToJson, attr)
 
   def testReadWrite(json: Json, attr: AttributeValue)(
-    implicit toTest: DynamoFormat[Json]
+      implicit toTest: DynamoFormat[Json]
   ): Assertion = {
     testWrite(json, attr)
     testRead(attr, json)
