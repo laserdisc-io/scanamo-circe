@@ -10,11 +10,11 @@ class CirceDynamoFormatSpec extends AnyWordSpec with Matchers with CommonFormatS
     import CirceDynamoFormat._
 
     "handle basic types" should {
-      behave like handleBasicTypes
+      behave.like(handleBasicTypes)
     }
 
     "handle arrays" should {
-      behave like handleArrays
+      behave.like(handleArrays)
     }
 
     "handle maps" should {
