@@ -1,6 +1,6 @@
 package io.laserdisc.dynamodb.circe
 
-import cats.syntax.either._
+import cats.syntax.either.*
 import org.scalacheck.Prop.forAll
 import org.scalacheck.{Properties, Test}
 import org.scalatest.OptionValues
@@ -14,7 +14,7 @@ object CodecsLaws extends Properties("Codecs") with OptionValues with ArbitraryM
   val reader: DynamoJsonReader = DynamoJsonReader.mkReader
   val writer: DynamoJsonWriter = DynamoJsonWriter.mkWriter
 
-  property("DynamoDB reader/writer pair is symmetric") = forAll { av: AttributeValue =>
+  property("DynamoDB reader/writer pair is symmetric") = forAll { (av: AttributeValue) =>
     av == (for {
       w <- writer.write(av)
       r <- reader.read(w)

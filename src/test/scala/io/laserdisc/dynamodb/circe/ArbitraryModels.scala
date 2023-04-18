@@ -4,7 +4,7 @@ import org.scalacheck.{Arbitrary, Gen}
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 trait ArbitraryModels {
   implicit def invoiceArb: Arbitrary[AttributeValue] = {
@@ -29,14 +29,14 @@ trait ArbitraryModels {
     val stringSetValue: Gen[AttributeValue] =
       Gen
         .chooseNum(0, 5)
-        .flatMap(size => Gen.listOfN(size, Gen.alphaNumStr).map(strings => AttributeValue.builder().ss(strings: _*).build()))
+        .flatMap(size => Gen.listOfN(size, Gen.alphaNumStr).map(strings => AttributeValue.builder().ss(strings*).build()))
 
     val numberSetValue: Gen[AttributeValue] = Gen
       .chooseNum(0, 5)
       .flatMap(size =>
         Gen
           .listOfN(size, Gen.chooseNum(Int.MinValue, Int.MaxValue))
-          .map(nums => AttributeValue.builder().ns(nums.map(_.toString): _*).build())
+          .map(nums => AttributeValue.builder().ns(nums.map(_.toString)*).build())
       )
 
     val binarySetValue =

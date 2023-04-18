@@ -4,12 +4,12 @@ import io.circe.Json
 import io.circe.parser.parse
 import org.scalatest.Assertion
 import org.scalatest.Assertions.fail
-import org.scalatest._
-import matchers.should.Matchers._
+import org.scalatest.*
+import matchers.should.Matchers.*
 import org.scanamo.DynamoFormat
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 package object circe {
 

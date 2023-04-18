@@ -1,11 +1,11 @@
 package io.laserdisc.scanamo.circe.internal
 
-import io.circe.syntax._
-import io.circe.{Json, _}
+import io.circe.syntax.*
+import io.circe.{Json, *}
 import org.scanamo.DynamoValue
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 trait ScanamoWriter[T] {
   def write(t: T): DynamoValue
@@ -13,7 +13,7 @@ trait ScanamoWriter[T] {
 
 class CirceScanamoWriter[T: Encoder](writeNullObjectAttrs: Boolean) extends ScanamoWriter[T] {
 
-  private[this] val folder = new Json.Folder[AttributeValue] {
+  private val folder = new Json.Folder[AttributeValue] {
     override def onNull: AttributeValue =
       AttributeValue.builder().nul(true).build()
 

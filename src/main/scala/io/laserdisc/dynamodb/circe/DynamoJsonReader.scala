@@ -1,13 +1,13 @@
 package io.laserdisc.dynamodb.circe
 
-import cats.syntax.either._
-import cats.syntax.traverse._
+import cats.syntax.either.*
+import cats.syntax.traverse.*
 import io.circe.{Json, JsonNumber, JsonObject}
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 import java.util.Base64
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 trait DynamoJsonReader {
   def read(json: Json): Either[String, AttributeValue]
@@ -16,7 +16,7 @@ trait DynamoJsonReader {
 object DynamoJsonReader {
 
   def mkReader: DynamoJsonReader = new DynamoJsonReader {
-    private[this] val folder = new Json.Folder[Either[String, AttributeValue]] {
+    private val folder = new Json.Folder[Either[String, AttributeValue]] {
       private def parseDynamoJsonEntry(key: String, dynamoJson: Json): Either[String, AttributeValue] =
         key.toUpperCase match {
           case "S" =>

@@ -1,7 +1,7 @@
 package io.laserdisc.scanamo.circe.internal
 
 import cats.implicits.toBifunctorOps
-import io.circe.{Json, _}
+import io.circe.{Json, *}
 import org.scanamo.{DynamoArray, DynamoObject, DynamoReadError, DynamoValue, TypeCoercionError}
 
 import java.io.Serializable
@@ -11,7 +11,7 @@ trait ScanamoReader extends Serializable {
   def read(dv: DynamoValue): Json
 
   def readAs[T: Decoder](dv: DynamoValue): Either[DynamoReadError, T] =
-    read(dv).as[T].leftMap(TypeCoercionError)
+    read(dv).as[T].leftMap(TypeCoercionError.apply)
 }
 
 class CirceScanamoReader extends ScanamoReader {
