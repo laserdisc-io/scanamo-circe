@@ -1,43 +1,65 @@
-lazy val scala212 = "2.12.13"
 lazy val scala213 = "2.13.10"
-
-def versionSpecificOptions(scalaVersion: String) =
-  CrossVersion.partialVersion(scalaVersion) match {
-    case Some((2, 12)) => Seq("-Ypartial-unification")
-    case _             => Seq.empty
-  }
+lazy val scala3   = "3.2.2"
 
 lazy val root = project
   .in(file("."))
   .settings(
     name               := "scanamo-circe",
     organization       := "io.laserdisc",
-    crossScalaVersions := List(scala212, scala213),
-    scalaVersion       := scala213,
+    crossScalaVersions := List(scala213, scala3),
+    scalaVersion       := scala3,
     licenses ++= Seq(("MIT", url("http://opensource.org/licenses/MIT"))),
     homepage := Some(url("https://github.com/laserdisc-io/scanamo-circe")),
     developers := List(
       Developer("semenodm", "Dmytro Semenov", "", url("https://github.com/semenodm")),
       Developer("barryoneill", "Barry O'Neill", "", url("https://github.com/barryoneill"))
     ),
-    Test / fork   := true,
-    scalacOptions := versionSpecificOptions(scalaVersion.value),
+    Test / fork := true,
     scalacOptions ++= Seq(
+      "-deprecation",
       "-encoding",
-      "UTF-8",                         // source files are in UTF-8
-      "-deprecation",                  // warn about use of deprecated APIs
-      "-unchecked",                    // warn about unchecked type parameters
-      "-feature",                      // warn about misused language features
-      "-language:higherKinds",         // allow higher kinded types without `import scala.language.higherKinds`
-      "-language:implicitConversions", // allow use of implicit conversions
-      "-language:postfixOps",          // postfix ops
-      "-Xlint",                        // enable handy linter warnings
-      "-Xfatal-warnings",              // turn compiler warnings into errors
-      "-Ywarn-macros:after"            // allows the compiler to resolve implicit imports being flagged as unused
+      "UTF-8",
+      "-feature",
+      "-language:existentials,experimental.macros,higherKinds,implicitConversions,postfixOps",
+      "-unchecked",
+      "-Xfatal-warnings"
     ),
+    scalacOptions ++= {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, minor)) if minor >= 13 =>
+          Seq(
+            "-Xlint:-unused,_",
+            "-Ywarn-numeric-widen",
+            "-Ywarn-value-discard",
+            "-Ywarn-unused:implicits",
+            "-Ywarn-unused:imports",
+            "-Xsource:3",
+            "-Xlint:-byname-implicit",
+            "-P:kind-projector:underscore-placeholders",
+            "-Xlint",
+            "-Ywarn-macros:after"
+          )
+        case _ => Seq.empty
+      }
+    },
+    scalacOptions ++= {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((3, _)) =>
+          Seq(
+            "-Ykind-projector:underscores",
+            "-source:future",
+            "-language:adhocExtensions",
+            "-Wconf:msg=`= _` has been deprecated; use `= uninitialized` instead.:s"
+          )
+        case _ => Seq.empty
+      }
+    },
+    libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.9.0",
     sbt.Test / testFrameworks += TestFrameworks.ScalaCheck,
-    addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
-    addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3"),
+    libraryDependencies ++= Seq(
+      compilerPlugin(("org.typelevel" %% "kind-projector" % "0.13.2").cross(CrossVersion.full)),
+      compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
+    ).filterNot(_ => scalaVersion.value.startsWith("3.")),
     Dependencies.Compat,
     Dependencies.Circe,
     Dependencies.Scanamo,

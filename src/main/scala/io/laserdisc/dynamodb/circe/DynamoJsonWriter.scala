@@ -1,12 +1,12 @@
 package io.laserdisc.dynamodb.circe
 
-import cats.syntax.either._
+import cats.syntax.either.*
 import io.circe.{Json, JsonObject}
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 import java.util.Base64
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 trait DynamoJsonWriter {
   def write(av: AttributeValue): Either[String, Json]
@@ -25,7 +25,7 @@ object DynamoJsonWriter {
               .map { case (k, v) =>
                 k -> toJson(v)
               }
-              .toIndexedSeq: _*
+              .toIndexedSeq*
           )
           .asRight
       else "AttributeValue is not a map".asLeft

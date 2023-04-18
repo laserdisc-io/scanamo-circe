@@ -7,7 +7,7 @@ class CirceDynamoFormatSpec extends AnyWordSpec with Matchers with CommonFormatS
 
   "CirceDynamoFormat" should {
 
-    import CirceDynamoFormat._
+    import CirceDynamoFormat.*
 
     "handle basic types" should {
       behave.like(handleBasicTypes)

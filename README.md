@@ -23,7 +23,7 @@ libraryDependencies += "io.laserdisc" %% "scanamo-circe" % "2.0.1"
 Then import the desired instance wherever you invoke Scanamo operations
 
 ```scala
-import io.laserdisc.scanamo.circe.CirceDynamoFormat._
+import io.laserdisc.scanamo.circe.CirceDynamoFormat.*
 ```
 
 *Note:* This imports an implicit `DynamoFormat[T]`, which will expect an implicit circe `Encoder[T]` and `Decoder[T]` in scope.
@@ -138,7 +138,7 @@ We can decode the above JSON into a `AttributeValue` like this:
 
 ```scala
 import io.circe.Json
-import io.circe.parser._
+import io.circe.parser.*
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 val jsonStr =
@@ -164,7 +164,7 @@ If you need to encode the AttributeValue to JSON, you can use the writer:
 import io.circe.Json
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 // remember the top level has always be `M`
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 val av = AttributeValue.builder().m(Map(
   "bar" -> AttributeValue.builder().n("42").build(),
   "baz" -> AttributeValue.builder().s("bazz").build()).asJava).build()

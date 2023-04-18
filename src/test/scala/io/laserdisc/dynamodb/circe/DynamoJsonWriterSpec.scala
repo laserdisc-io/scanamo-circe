@@ -5,7 +5,7 @@ import org.scalatest.wordspec.AnyWordSpec
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 class DynamoJsonWriterSpec extends AnyWordSpec with Matchers {
 

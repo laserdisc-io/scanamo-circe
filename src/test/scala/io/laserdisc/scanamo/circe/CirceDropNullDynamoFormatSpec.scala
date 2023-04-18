@@ -7,7 +7,7 @@ class CirceDropNullDynamoFormatSpec extends AnyWordSpec with Matchers with Commo
 
   "CirceDropNullDynamoFormat" should {
 
-    import CirceDropNullDynamoFormat._
+    import CirceDropNullDynamoFormat.*
 
     "handle basic types" should {
       behave.like(handleBasicTypes)
