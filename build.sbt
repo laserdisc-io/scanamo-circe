@@ -54,7 +54,6 @@ lazy val root = project
         case _ => Seq.empty
       }
     },
-    libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.9.0",
     sbt.Test / testFrameworks += TestFrameworks.ScalaCheck,
     libraryDependencies ++= Seq(
       compilerPlugin(("org.typelevel" %% "kind-projector" % "0.13.2").cross(CrossVersion.full)),
