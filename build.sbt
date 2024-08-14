@@ -1,5 +1,5 @@
-lazy val scala213 = "2.13.10"
-lazy val scala3   = "3.2.2"
+lazy val scala213 = "2.13.14"
+lazy val scala3   = "3.3.3"
 
 lazy val root = project
   .in(file("."))
@@ -56,7 +56,7 @@ lazy val root = project
     },
     sbt.Test / testFrameworks += TestFrameworks.ScalaCheck,
     libraryDependencies ++= Seq(
-      compilerPlugin(("org.typelevel" %% "kind-projector" % "0.13.2").cross(CrossVersion.full)),
+      compilerPlugin(("org.typelevel" %% "kind-projector" % "0.13.3").cross(CrossVersion.full)),
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
     ).filterNot(_ => scalaVersion.value.startsWith("3.")),
     Dependencies.Compat,
