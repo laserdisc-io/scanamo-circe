@@ -9,19 +9,17 @@ class CirceDynamoFormatSpec extends AnyWordSpec with Matchers with CommonFormatS
 
     import CirceDynamoFormat.*
 
-    "handle basic types" should {
+    "handle basic types" should
       behave.like(handleBasicTypes)
-    }
 
-    "handle arrays" should {
+    "handle arrays" should
       behave.like(handleArrays)
-    }
 
     "handle maps" should {
 
       "empty map" in testReadWrite("{}", mapAttr())
 
-      "basic map" in {
+      "basic map" in
         testReadWrite(
           """{
             |  "numberTest" : 3,
@@ -36,9 +34,8 @@ class CirceDynamoFormatSpec extends AnyWordSpec with Matchers with CommonFormatS
             "boolTest"   -> boolAttr(true)
           )
         )
-      }
 
-      "nested map" in {
+      "nested map" in
         testReadWrite(
           """{
             |  "aaa": [
@@ -76,7 +73,6 @@ class CirceDynamoFormatSpec extends AnyWordSpec with Matchers with CommonFormatS
             )
           )
         )
-      }
 
     }
   }

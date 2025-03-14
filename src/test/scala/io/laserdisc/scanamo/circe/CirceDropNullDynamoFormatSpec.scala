@@ -9,13 +9,11 @@ class CirceDropNullDynamoFormatSpec extends AnyWordSpec with Matchers with Commo
 
     import CirceDropNullDynamoFormat.*
 
-    "handle basic types" should {
+    "handle basic types" should
       behave.like(handleBasicTypes)
-    }
 
-    "handle arrays" should {
+    "handle arrays" should
       behave.like(handleArrays)
-    }
 
     "handle maps" should {
 
