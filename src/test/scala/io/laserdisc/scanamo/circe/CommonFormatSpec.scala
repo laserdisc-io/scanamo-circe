@@ -10,9 +10,8 @@ trait CommonFormatSpec extends AnyWordSpec with Matchers {
 
   def handleBasicTypes(implicit fmt: DynamoFormat[Json]): Unit = {
 
-    "null" in {
+    "null" in
       testReadWrite(Json.Null, nullAttr())
-    }
 
     "string" in {
       testReadWrite("\"\"", stringAttr(""))

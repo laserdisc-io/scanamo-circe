@@ -7,8 +7,8 @@ ThisBuild / laserdiscCompileTarget := Scala2And3
 lazy val root = project
   .in(file("."))
   .settings(
-    name        := "scanamo-circe",
-    developers  := List(Dmytro, Barry),
+    name       := "scanamo-circe",
+    developers := List(Dmytro, Barry),
     Dependencies.Compat,
     Dependencies.Circe,
     Dependencies.Scanamo,
