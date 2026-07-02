@@ -1,8 +1,9 @@
-import laserdisc.sbt.CompileTarget.Scala2And3
+import laserdisc.sbt.CompileTarget
+import laserdisc.sbt.CompileTarget.Scala2And3LTS
 import laserdisc.sbt.LaserDiscDevelopers.*
 
 ThisBuild / laserdiscRepoName      := "scanamo-circe"
-ThisBuild / laserdiscCompileTarget := Scala2And3
+ThisBuild / laserdiscCompileTarget := Scala2And3LTS
 
 lazy val root = project
   .in(file("."))
